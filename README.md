@@ -1,2 +1,2 @@
-# spviewer
-spread viewer
+# spread viewer
+ADK(Aidos kuneen) price spread viewer
