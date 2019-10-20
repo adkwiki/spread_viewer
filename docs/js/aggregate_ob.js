@@ -28,7 +28,7 @@ function renderOb(choppedOrderbookBuy, choppedOrderbookSell) {
 
         $("#ob_bid_list").append(
             $('<div class="row order"></div>')
-            .append($(`<div class="col-1 px-1"><img class="ex-icon" src="../image/exchange/${exchangeName.toLowerCase()}.svg"></div>`))
+            .append($(`<div class="col-1 px-1"><img class="ex-icon" src="/image/exchange/${exchangeName.toLowerCase()}.svg"></div>`))
             .append($('<div class="col-3 px-1"></div>').text(exchangeName))
             //.append($('<div class="col-3 px-1 text-right"></div>').text(bidTotalBtc.toFixed(1)))
             .append($('<div class="col-4 px-1 text-right"></div>').text(bid.amount.toFixed(2))) //text(bid.order_amount.toFixed(2)))
@@ -80,7 +80,7 @@ function renderOb(choppedOrderbookBuy, choppedOrderbookSell) {
             .append($('<div class="col-4 px-1 text-right"></div>').text(ask.amount.toFixed(2))) //.text(ask.order_amount.toFixed(2)))
             //.append($('<div class="col-3 px-2 text-right"></div>').text(askTotalBtc.toFixed(1)))
             .append($('<div class="col-3 px-1"></div>').text(exchangeName))
-            .append($(`<div class="col-1 px-1"><img class="ex-icon" src="../image/exchange/${exchangeName.toLowerCase()}.svg"></div>`))
+            .append($(`<div class="col-1 px-1"><img class="ex-icon" src="/image/exchange/${exchangeName.toLowerCase()}.svg"></div>`))
         );
     
         // depth
