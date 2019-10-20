@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="apple-touch-icon" type="image/png" href="image/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="image/icon-192x192.png">
+
+    <meta name="twitter:card" content="summary" />
+
+    <meta property="og:url" content="https://adkwiki.github.io/spread_viewer" />
+    <meta property="og:title" content="ADK Spraed Viewer" />
+    <meta property="og:site_name" content="ADK Spraed Viewer" />
+    <meta property="og:description" content="ADK(Aidos kuneen) price spread viewer" />
+    <meta property="og:image" content="https://adkwiki.github.io/spread_viewer/image/icon-192x192.png" />
+    <meta property="og:type" content="website" />
+
+    <title>ADK Spraed Viewer</title>
+    
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+ 
+    <style type="text/css">
+      /* TODO inline css to css file  */
+      body {
+        font-family:"ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+        font-size:0.5rem;
+      }
+
+      @media (min-width: 992px) {
+        body {
+          font-size:1.0rem;
+        }
+      }
+
+      .price {
+        text-align:right
+      }
+      /* TODO rename class */
+      .price-left {color:#a9a9a9}
+      .price-buy {color:#0FB387}
+      .price-sell {color:#D9544F}
+      .table-wrapper-txs {
+        width: 100%;
+        height: 200px;
+        overflow: scroll;
+      }
+      td, th {
+        border-bottom: 1px solid #f5f5f5;
+      }
+      table {
+        table-layout: fixed;
+        width: 100%;
+      }
+      thead tr th {
+        position: sticky;
+        top: 0;
+        background-color: rgba(255,255,255,0.75);
+      }
+      tbody tr th {
+        position: sticky;
+        left: 0;
+      }
+      .order {
+        border-bottom: 1px solid #f5f5f5;
+      }
+
+      .ex-icon {
+        width: 15px;
+        height: 15px;
+      }
+    </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- infomation  -->
+    <div class="row">
+      <div id="infomation" class="col-12">
+        <!-- Error message, infomation(ex updatedAt)... -->
+      </div>
+    </div>
+
+    <!-- TODO padding method -->
+    <div class="row">
+      <div class="col-12 px-0">
+        <hr style="margin-top:2px; margin-bottom:5px;">
+      </div>
+    </div>
+
+    <!-- orderbook -->
+    <div class="row">
+      <div class="col-12 px-1">
+        <b>orderbook</b>
+      </div>
+
+      <div class="col-12 p-1">
+        <!-- spacer -->
+      </div>
+
+
+    </div>
+
+
+    <!-- orderbook : header -->
+    <div class="row">
+      <!-- bid BUY -->
+      <div id="ob_bid_list" class="col-6">
+
+        <!-- header -->
+        <div class="row">
+          <div class="col-2 px-1 price-buy">BUY</div>
+          <div class="col-10 px-1 text-right"><span id="ob_bid_adk"></span> ADK
+            <!-- (Ƀ <span id="ob_bid_btc"></span>)--></div>
+        </div>
+
+        <div class="row">
+          <div class="col-1 px-1">ex</div>
+          <div class="col-3 px-1"></div>
+          <!-- <div class="col-3 px-1">sum</div> -->
+          <div class="col-4 px-1">ADK</div>
+          <div class="col-4 px-1">price</div>
+        </div>
+
+      </div>
+
+      <!-- ask SELL -->
+      <div id="ob_ask_list" class="col-6">
+
+        <!-- header -->
+        <div class="row">
+          <div class="col-2 px-1 price-sell">SELL</div>
+          <div class="col-10 px-2 text-right"><span id="ob_ask_adk"></span> ADK
+            <!-- (Ƀ <span id="ob_ask_btc"></span>)--></div>
+        </div>
+
+        <div class="row">
+          <div class="col-4 px-1">price</div>
+          <div class="col-4 px-1">ADK</div>
+          <div class="col-3 px-1"></div>
+          <!-- div class="col-3 px-2">sum</div> -->
+          <div class="col-1 px-1">ex</div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="./js/lib/jquery.min.js"></script>
+  <script src="./js/lib/jquery.sparkline.retina.js"></script>
+  <script src="./js/lib/moment.js"></script>
+  <!--
+  <script src="https://www.amcharts.com/lib/4/core.js"></script>
+  <script src="https://www.amcharts.com/lib/4/charts.js"></script>
+  <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+  -->
+  <!-- test mock api data-->
+  <!--
+  <script src="./mock_api/ob_aidosmarket.js"></script>
+  <script src="./mock_api/ob_stex.js"></script>
+  <script src="./mock_api/ob_idax.js"></script>
+  <script src="./mock_api/ob_hitbtc.js"></script>
+  <script src="./mock_api/ob_exrates.js"></script>
+  <script src="./mock_api/ob_cointiger.js"></script>
+  <script src="./mock_api/ob_coineal.js"></script>
+  <script src="./mock_api/ob_coinbene.js"></script>
+  <script src="./mock_api/ob_p2pb2b_buy.js"></script>
+  <script src="./mock_api/ob_p2pb2b_sell.js"></script>
+  <script src="./mock_api/ob_fatbtc.js"></script>
+  -->
+
+  <script>
+  var scripts = [
+    "model/orderbook.js",
+    "utils.js",
+    
+    "parser/ob_aidosmarket.js",
+    "parser/ob_stex.js",
+    "parser/ob_idax.js",
+    "parser/ob_hitbtc.js",
+    "parser/ob_exrates.js",
+    "parser/ob_cointiger.js",
+    "parser/ob_coineal.js",
+    "parser/ob_coinbene.js",
+    "parser/ob_p2pb2b.js",
+    "parser/ob_fatbtc.js",
+
+    "parser/ob_factory_api_caller.js",
+    "aggregate_ob.js",
+  ];
+  var versioningNum = new Date().getTime();
+
+  for (let script of scripts) {
+    var jsURL = './js/' + script + '?ver=' + versioningNum
+    var jsElement = document.createElement('script')
+    jsElement.setAttribute('src', jsURL)
+    document.getElementsByTagName("body")[0].appendChild(jsElement)
+  }
+  </script>
+
+  <script type="text/javascript">
+    window.onload = function(){
+      $("#infomation").text("Now Loading...");
+      aggregateOb();
+      $("#infomation").text("Updated at " + moment().format("YYYY/MM/DD HH:mm:ss"));
+    };
+  </script>
+</body>
+</html>
