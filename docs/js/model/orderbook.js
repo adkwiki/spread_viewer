@@ -124,13 +124,13 @@ let EXCHANGE_CURRENCY_PAIRS = [
     new ExchangeCurrencyPair(EXCHANGE_ID.CoinBene, CURRENCY_NAME.ADK, CURRENCY_NAME.BTC,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "http://openapi-exchange.coinbene.com/api/exchange/v2/market/orderBook?symbol=ADK%2FBTC&depth=100")]),
     
-    /* TODO await tow fetch
+    /* TODO await tow fetch */
     new ExchangeCurrencyPair(EXCHANGE_ID.P2PB2B, CURRENCY_NAME.ADK, CURRENCY_NAME.BTC,
         [
             new OrderBookUrl(OB_URL_TYPE.BUY, "https://api.p2pb2b.io/api/v1/public/book?market=ADK_BTC&side=buy&offset=0&limit=100"),
             new OrderBookUrl(OB_URL_TYPE.SELL, "https://api.p2pb2b.io/api/v1/public/book?market=ADK_BTC&side=sell&offset=0&limit=100"),
         ]),
-    */
+    
     /* fatbtc API locate under cloudflare DDOS protection
     new ExchangeCurrencyPair(EXCHANGE_ID.fatbtc, CURRENCY_NAME.ADK, CURRENCY_NAME.BTC,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://www.fatbtc.com/m/depth/ADKBTC")]),
