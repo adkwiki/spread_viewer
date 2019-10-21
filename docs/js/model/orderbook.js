@@ -115,19 +115,20 @@ let EXCHANGE_CURRENCY_PAIRS = [
     new ExchangeCurrencyPair(EXCHANGE_ID.AidosMarket, CURRENCY_NAME.ADK, CURRENCY_NAME.BTC,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://aidosmarket.com/api/order-book")]),
     
+    /*
     new ExchangeCurrencyPair(EXCHANGE_ID.EXRATES, CURRENCY_NAME.ADK, CURRENCY_NAME.BTC,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://api.exrates.me/openapi/v1/public/orderbook/adk_btc")]),
 
     new ExchangeCurrencyPair(EXCHANGE_ID.EXRATES, CURRENCY_NAME.ADK, CURRENCY_NAME.ETH,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://api.exrates.me/openapi/v1/public/orderbook/adk_eth")],
         "https://api.exrates.me/openapi/v1/public/ticker?currency_pair=eth_btc"),
-    
+    */
+   
     new ExchangeCurrencyPair(EXCHANGE_ID.HitBTC, CURRENCY_NAME.ADK, CURRENCY_NAME.BTC,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://api.hitbtc.com/api/2/public/orderbook/ADKBTC")]),
     
     new ExchangeCurrencyPair(EXCHANGE_ID.IDAX, CURRENCY_NAME.ADK, CURRENCY_NAME.BTC,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://openapi.idax.pro/api/v2/depth?pair=ADK_BTC")]),
-    
     
     new ExchangeCurrencyPair(EXCHANGE_ID.IDAX, CURRENCY_NAME.ADK, CURRENCY_NAME.ETH,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://openapi.idax.pro/api/v2/depth?pair=ADK_ETH")],
