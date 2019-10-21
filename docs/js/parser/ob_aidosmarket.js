@@ -1,47 +1,36 @@
-var obApiCallerAidosMarket = function (exchangeCurrencyPair) {
-    console.log("obApiCallerAidosMarket");
+var obApiCallerAidosMarket = async function (exchangeCurrencyPair) {
 
-    var obUrl = exchangeCurrencyPair.obUrl[0].url;
-    console.log(obUrl);
-  
-    return fetch(obUrl, { mode:"cors" })
-      .then(response => {
-        if(response.ok) {
-          return response.json();
-        } else {
-          throw new Error();
-        }
-      })
-      .then(json => {
-        var orderBooks = obMapperAidosMaket(json, exchangeCurrencyPair.left, exchangeCurrencyPair.right);
-        console.log(orderBooks);
-        return orderBooks;
-      })
-      .catch(error => console.log(error));
-}
+  var priceConverterFunction = function(json) {
+    return null;
+  };
 
+  var obMapperFunction = function(json, exchangeCurrencyPair, convertPrice) {
 
-function obMapperAidosMaket(json, currencyLeft, currencyRigh) {
-    // json -> raw json
-  
     // bid : buy
-    var bidOrders = parseOrderAidosMaket(json, "bid", currencyLeft, currencyRigh);
-    //console.log(bidOrders);
-
-    // ask : sell
-    var askOrders = parseOrderAidosMaket(json, "ask", currencyLeft, currencyRigh);
-    //console.log(askOrders);
-
-    return new OrderBook(bidOrders, askOrders);
-}
+    var bidOrders = parseOrderAidosMaket(json, "bid", exchangeCurrencyPair, convertPrice);
   
-function parseOrderAidosMaket(json, bidOrAsk, currencyLeft, currencyRigh) {
-    var orderBook = json["order-book"];
+    // ask : sell
+    var askOrders = parseOrderAidosMaket(json, "ask", exchangeCurrencyPair, convertPrice);
+  
+    return new OrderBook(exchangeCurrencyPair, true, bidOrders, askOrders);
+  };
 
-    var orderArray = [];
-    for (let order of orderBook[bidOrAsk]) {
-        orderArray.push(new Order(EXCHANGE_ID.AidosMarket, order.price, order.order_amount, currencyLeft, currencyRigh));
-    }
+  return apiCallerBase(
+    exchangeCurrencyPair,
+    exchangeCurrencyPair.priceConvertUrl,
+    exchangeCurrencyPair.obUrl[0].url,
+    priceConverterFunction,
+    obMapperFunction
+    );
+}
 
-    return orderArray;
+function parseOrderAidosMaket(json, bidOrAsk, exchangeCurrencyPair, convertPrice) {
+  var orderBook = json["order-book"];
+
+  var orderArray = [];
+  for (let order of orderBook[bidOrAsk]) {
+      orderArray.push(new Order(exchangeCurrencyPair.exchangeId, order.price, order.order_amount, exchangeCurrencyPair.right));
+  }
+
+  return orderArray;
 }

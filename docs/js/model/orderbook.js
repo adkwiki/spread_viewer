@@ -55,17 +55,18 @@ function getExchangeName(exchangeId) {
 }
 
 class Order {
-    constructor(exchangeId, price, amount, currencyLeft, currencyRight) {
+    constructor(exchangeId, price, amount, currencyRight) {
         this.exchangeId = exchangeId;
         this.price = price;
         this.amount = amount;
-        this.currencyLeft = currencyLeft;
         this.currencyRight = currencyRight;
     }
 }
 
 class OrderBook {
-    constructor(buyOrders, sellOrders) {
+    constructor(exchangeCurrencyPair, status, buyOrders, sellOrders) {
+        this.exchangeCurrencyPair = exchangeCurrencyPair;
+        this.status = status;
         this.buyOrders = buyOrders;
         this.sellOrders = sellOrders;
     }
@@ -115,15 +116,13 @@ let EXCHANGE_CURRENCY_PAIRS = [
     new ExchangeCurrencyPair(EXCHANGE_ID.AidosMarket, CURRENCY_NAME.ADK, CURRENCY_NAME.BTC,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://aidosmarket.com/api/order-book")]),
     
-    /*
     new ExchangeCurrencyPair(EXCHANGE_ID.EXRATES, CURRENCY_NAME.ADK, CURRENCY_NAME.BTC,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://api.exrates.me/openapi/v1/public/orderbook/adk_btc")]),
 
     new ExchangeCurrencyPair(EXCHANGE_ID.EXRATES, CURRENCY_NAME.ADK, CURRENCY_NAME.ETH,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://api.exrates.me/openapi/v1/public/orderbook/adk_eth")],
         "https://api.exrates.me/openapi/v1/public/ticker?currency_pair=eth_btc"),
-    */
-   
+    
     new ExchangeCurrencyPair(EXCHANGE_ID.HitBTC, CURRENCY_NAME.ADK, CURRENCY_NAME.BTC,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://api.hitbtc.com/api/2/public/orderbook/ADKBTC")]),
     
@@ -144,7 +143,7 @@ let EXCHANGE_CURRENCY_PAIRS = [
     new ExchangeCurrencyPair(EXCHANGE_ID.STEX, CURRENCY_NAME.ADK, CURRENCY_NAME.USD,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://api3.stex.com/public/orderbook/744")],
         "https://api3.stex.com/public/ticker/702"),
-
+    
     new ExchangeCurrencyPair(EXCHANGE_ID.STEX, CURRENCY_NAME.ADK, CURRENCY_NAME.EUR,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://api3.stex.com/public/orderbook/745")],
         "https://api3.stex.com/public/ticker/703"),

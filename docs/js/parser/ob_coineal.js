@@ -1,49 +1,38 @@
-var obApiCallerCoineal = function (exchangeCurrencyPair) {
-    console.log("obApiCallerCoineal");
-  
-    var obUrl = exchangeCurrencyPair.obUrl[0].url;
-    console.log(obUrl);
-  
-    return fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(obUrl)}`)
-    .then(response => {
-      if(response.ok) {
-        return response.json();
-      } else {
-        throw new Error();
-      }
-    })
-    .then(json => {
-      var orderBooks = obMapperCoineal(json, exchangeCurrencyPair.left, exchangeCurrencyPair.right);
-      console.log(orderBooks);
-      return orderBooks;
-    })
-    .catch(error => console.log(error));
-  }
-  
-  
-  function obMapperCoineal(json, currencyLeft, currencyRigh) {
-    // json -> raw json
-  
+var obApiCallerCoineal = async function (exchangeCurrencyPair) {
+
+  var priceConverterFunction = function(json) {
+    return null;
+  };
+
+  var obMapperFunction = function(json, exchangeCurrencyPair, convertPrice) {
+
     // bid : buy
-    var bidOrders = parseOrderCoineal(json, "bids", currencyLeft, currencyRigh);
-    //console.log(bidOrders);
+    var bidOrders = parseOrderCoineal(json, "bids", exchangeCurrencyPair, convertPrice);
   
     // ask : sell
-    var askOrders = parseOrderCoineal(json, "asks", currencyLeft, currencyRigh);
-    //console.log(askOrders);
+    var askOrders = parseOrderCoineal(json, "asks", exchangeCurrencyPair, convertPrice);
   
-    return new OrderBook(bidOrders, askOrders);
+    return new OrderBook(exchangeCurrencyPair, true, bidOrders, askOrders);
+  };
+
+  return apiCallerBase(
+    exchangeCurrencyPair,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(exchangeCurrencyPair.priceConvertUrl)}`,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(exchangeCurrencyPair.obUrl[0].url)}`,
+    priceConverterFunction,
+    obMapperFunction
+    );
+}
+
+function parseOrderCoineal(json, bidOrAsk, exchangeCurrencyPair, convertPrice) {
+  var orderBook = (json["data"])["tick"];
+
+  var orderArray = [];
+  for (let order of orderBook[bidOrAsk]) {
+      var price = parseFloat(order[0]) * convertPrice;
+      var amount = parseFloat(order[1]);
+      orderArray.push(new Order(exchangeCurrencyPair.exchangeId, price, amount, exchangeCurrencyPair.right));
   }
-  
-  function parseOrderCoineal(json, bidOrAsk, currencyLeft, currencyRigh) {
-    var orderBook = (json["data"])["tick"];
-  
-    var orderArray = [];
-    for (let order of orderBook[bidOrAsk]) {
-        var price = parseFloat(order[0]);
-        var amount = parseFloat(order[1]);
-        orderArray.push(new Order(EXCHANGE_ID.Coineal, price, amount, currencyLeft, currencyRigh));
-    }
-  
-    return orderArray;
-  }
+
+  return orderArray;
+}

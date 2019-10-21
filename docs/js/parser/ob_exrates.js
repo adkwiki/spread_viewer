@@ -1,72 +1,36 @@
 var obApiCallerExrates = async function (exchangeCurrencyPair) {
-  console.log("obApiCallerExrates");
+
+  var priceConverterFunction = function(json) {
+    return json[0].last;
+  };
+
+  var obMapperFunction = function(json, exchangeCurrencyPair, convertPrice) {
+
+    // bid : buy
+    var bidOrders = parseOrderExrates(json, "BUY", exchangeCurrencyPair, convertPrice);
   
-  var obUrl = exchangeCurrencyPair.obUrl[0].url;
-  console.log(obUrl);
+    // ask : sell
+    var askOrders = parseOrderExrates(json, "SELL", exchangeCurrencyPair, convertPrice);
+  
+    return new OrderBook(exchangeCurrencyPair, true, bidOrders, askOrders);
+  };
 
-  var convertPrice = 1;
-  if (exchangeCurrencyPair.right !== CURRENCY_NAME.BTC) {
-    // need converter
-    convertPrice = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(exchangeCurrencyPair.priceConvertUrl)}`)
-    .then(response => {
-      if(response.ok) {
-        return response.json();
-      } else {
-        throw new Error();
-      }
-    })
-    .then(json => {
-      var convertPrice = priceConverterMapperExrates(json);
-      console.log(convertPrice);
-      return convertPrice;
-    })
-    .catch(error => console.log(error));
-  }
-
-  console.log(convertPrice);
-
-  return fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(obUrl)}`)
-    .then(response => {
-      if(response.ok) {
-        return response.json();
-      } else {
-        throw new Error();
-      }
-    })
-    .then(json => {
-      var orderBooks = obMapperExrates(json, exchangeCurrencyPair.left, exchangeCurrencyPair.right, convertPrice);
-      console.log(orderBooks);
-      return orderBooks;
-    })
-    .catch(error => console.log(error));
-
+  return apiCallerBase(
+    exchangeCurrencyPair,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(exchangeCurrencyPair.priceConvertUrl)}`,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(exchangeCurrencyPair.obUrl[0].url)}`,
+    priceConverterFunction,
+    obMapperFunction
+    );
 }
 
-function priceConverterMapperExrates(json) {
-  return json[0].last;
-}
-
-function obMapperExrates(json, currencyLeft, currencyRigh, convertPrice) {
-  // json -> raw json
-
-  // bid : buy
-  var bidOrders = parseOrderExrates(json, "BUY", currencyLeft, currencyRigh, convertPrice);
-  //console.log(bidOrders);
-
-  // ask : sell
-  var askOrders = parseOrderExrates(json, "SELL", currencyLeft, currencyRigh, convertPrice);
-  //console.log(askOrders);
-
-  return new OrderBook(bidOrders, askOrders);
-}
-
-function parseOrderExrates(json, bidOrAsk, currencyLeft, currencyRigh, convertPrice) {
+function parseOrderExrates(json, bidOrAsk, exchangeCurrencyPair, convertPrice) {
 
   var orderArray = [];
   for (let order of json[bidOrAsk]) {
       var price = parseFloat(order.rate) * convertPrice;
       var amount = parseFloat(order.amount);
-      orderArray.push(new Order(EXCHANGE_ID.EXRATES, price, amount, currencyLeft, currencyRigh));
+      orderArray.push(new Order(exchangeCurrencyPair.exchangeId, price, amount, exchangeCurrencyPair.right));
   }
 
   return orderArray;

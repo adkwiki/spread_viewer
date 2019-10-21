@@ -1,48 +1,37 @@
+var obApiCallerHitbtc = async function (exchangeCurrencyPair) {
 
-var obApiCallerHitbtc = function (exchangeCurrencyPair) {
-    console.log("obApiCallerHitbtc");
-  
-    var obUrl = exchangeCurrencyPair.obUrl[0].url;
-    console.log(obUrl);
-  
-    return fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(obUrl)}`)
-    .then(response => {
-      if(response.ok) {
-        return response.json();
-      } else {
-        throw new Error();
-      }
-    })
-    .then(json => {
-      var orderBooks = obMapperHitBtc(json, exchangeCurrencyPair.left, exchangeCurrencyPair.right);
-      console.log(orderBooks);
-      return orderBooks;
-    })
-    .catch(error => console.log(error));
-  }
-  
-  function obMapperHitBtc(json, currencyLeft, currencyRigh) {
-    // json -> raw json
-  
+  var priceConverterFunction = function(json) {
+    return null;
+  };
+
+  var obMapperFunction = function(json, exchangeCurrencyPair, convertPrice) {
+
     // bid : buy
-    var bidOrders = parseOrderHitBtc(json, "bid", currencyLeft, currencyRigh);
-    //console.log(bidOrders);
-  
+    var bidOrders = parseOrderHitbtc(json, "bid", exchangeCurrencyPair, convertPrice);
+
     // ask : sell
-    var askOrders = parseOrderHitBtc(json, "ask", currencyLeft, currencyRigh);
-    //console.log(askOrders);
-  
-    return new OrderBook(bidOrders, askOrders);
+    var askOrders = parseOrderHitbtc(json, "ask", exchangeCurrencyPair, convertPrice);
+
+    return new OrderBook(exchangeCurrencyPair, true, bidOrders, askOrders);
+  };
+
+  return apiCallerBase(
+    exchangeCurrencyPair,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(exchangeCurrencyPair.priceConvertUrl)}`,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(exchangeCurrencyPair.obUrl[0].url)}`,
+    priceConverterFunction,
+    obMapperFunction
+    );
+}
+
+function parseOrderHitbtc(json, bidOrAsk, exchangeCurrencyPair, convertPrice) {
+
+  var orderArray = [];
+  for (let order of json[bidOrAsk]) {
+      var price = parseFloat(order.price) * convertPrice;
+      var amount = parseFloat(order.size);
+      orderArray.push(new Order(exchangeCurrencyPair.exchangeId, price, amount, exchangeCurrencyPair.right));
   }
-  
-  function parseOrderHitBtc(json, bidOrAsk, currencyLeft, currencyRigh) {
-  
-    var orderArray = [];
-    for (let order of json[bidOrAsk]) {
-        var price = parseFloat(order.price);
-        var amount = parseFloat(order.size);
-        orderArray.push(new Order(EXCHANGE_ID.HitBTC, price, amount, currencyLeft, currencyRigh));
-    }
-  
-    return orderArray;
-  }
+
+  return orderArray;
+}
