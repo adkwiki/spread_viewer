@@ -1,5 +1,5 @@
 class Exchange {
-    constructor(exchangeId, name, orderUrlGenerateCallback) {
+    constructor(exchangeId, name) {
         this.exchangeId = exchangeId;
         this.name = name;
     } 
@@ -21,8 +21,9 @@ let EXCHANGE_ID = {
 let CURRENCY_NAME = {
     ADK : "ADK",
     BTC : "BTC",
-    // ETH : "ETH",
-    // USD : "USD",
+    ETH : "ETH",
+    USD : "USD",
+    EUR : "EUR",
 };
 
 let EXCHANGES = [
@@ -47,10 +48,12 @@ function getExchangeName(exchangeId) {
 }
 
 class Order {
-    constructor(exchangeId, price, amount) {
+    constructor(exchangeId, price, amount, currencyLeft, currencyRight) {
         this.exchangeId = exchangeId;
         this.price = price;
         this.amount = amount;
+        this.currencyLeft = currencyLeft;
+        this.currencyRight = currencyRight;
     }
 }
 
@@ -87,44 +90,61 @@ class OrderBookUrl {
 }
 
 class ExchangeCurrencyPair {
-    constructor(exchangeId, left, right, obUrl) {
+    constructor(exchangeId, left, right, obUrl, priceConvertUrl) {
         this.exchangeId = exchangeId;
         this.left = left;
         this.right = right;
         this.obUrl = obUrl;
+        this.priceConvertUrl = priceConvertUrl;
+    }
+
+    getPairName() {
+        return `${this.left}/${this.right}`
     }
 }
 
 let EXCHANGE_CURRENCY_PAIRS = [
+    
     new ExchangeCurrencyPair(EXCHANGE_ID.AidosMarket, CURRENCY_NAME.ADK, CURRENCY_NAME.BTC,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://aidosmarket.com/api/order-book")]),
-
-    // EXRATES has problem in CORS
+    
     new ExchangeCurrencyPair(EXCHANGE_ID.EXRATES, CURRENCY_NAME.ADK, CURRENCY_NAME.BTC,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://api.exrates.me/openapi/v1/public/orderbook/adk_btc")]),
     
-    // HitBTC has problem in CORS
+    
     new ExchangeCurrencyPair(EXCHANGE_ID.HitBTC, CURRENCY_NAME.ADK, CURRENCY_NAME.BTC,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://api.hitbtc.com/api/2/public/orderbook/ADKBTC")]),
     
     new ExchangeCurrencyPair(EXCHANGE_ID.IDAX, CURRENCY_NAME.ADK, CURRENCY_NAME.BTC,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://openapi.idax.pro/api/v2/depth?pair=ADK_BTC")]),
+    
+    
+    new ExchangeCurrencyPair(EXCHANGE_ID.IDAX, CURRENCY_NAME.ADK, CURRENCY_NAME.ETH,
+        [new OrderBookUrl(OB_URL_TYPE.ALL, "https://openapi.idax.pro/api/v2/depth?pair=ADK_ETH")],
+        "https://openapi.idax.pro/api/v2/ticker?pair=ETH_BTC"),
+    
+    
     new ExchangeCurrencyPair(EXCHANGE_ID.STEX, CURRENCY_NAME.ADK, CURRENCY_NAME.BTC,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://api3.stex.com/public/orderbook/743")]),
-    
-    // CoinTiger has problem in CORS
+
+    new ExchangeCurrencyPair(EXCHANGE_ID.STEX, CURRENCY_NAME.ADK, CURRENCY_NAME.ETH,
+        [new OrderBookUrl(OB_URL_TYPE.ALL, "https://api3.stex.com/public/orderbook/952")],
+        "https://api3.stex.com/public/ticker/2"),
+
+    /* not supported pair?     
+    new ExchangeCurrencyPair(EXCHANGE_ID.STEX, CURRENCY_NAME.ADK, CURRENCY_NAME.USD,
+        [new OrderBookUrl(OB_URL_TYPE.ALL, "https://api3.stex.com/public/orderbook/744")],
+        "https://api3.stex.com/public/ticker/702"),
+    */
     new ExchangeCurrencyPair(EXCHANGE_ID.CoinTiger, CURRENCY_NAME.ADK, CURRENCY_NAME.BTC,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://api.cointiger.com/exchange/trading/api/market/depth?api_key=100310001&symbol=adkbtc&type=step0")]),
     
-    // Coineal has problem in CORS
     new ExchangeCurrencyPair(EXCHANGE_ID.Coineal, CURRENCY_NAME.ADK, CURRENCY_NAME.BTC,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://exchange-open-api.coineal.com/open/api/market_dept?symbol=adkbtc&type=step0")]),
     
-    // CoinBene has problem in CORS
     new ExchangeCurrencyPair(EXCHANGE_ID.CoinBene, CURRENCY_NAME.ADK, CURRENCY_NAME.BTC,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "http://openapi-exchange.coinbene.com/api/exchange/v2/market/orderBook?symbol=ADK%2FBTC&depth=100")]),
     
-    /* TODO await tow fetch */
     new ExchangeCurrencyPair(EXCHANGE_ID.P2PB2B, CURRENCY_NAME.ADK, CURRENCY_NAME.BTC,
         [
             new OrderBookUrl(OB_URL_TYPE.BUY, "https://api.p2pb2b.io/api/v1/public/book?market=ADK_BTC&side=buy&offset=0&limit=100"),

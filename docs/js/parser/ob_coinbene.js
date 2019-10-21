@@ -13,7 +13,7 @@ var obApiCallerCoinbene = function (exchangeCurrencyPair) {
       }
     })
     .then(json => {
-      var orderBooks = obMapperCoinbene(json);
+      var orderBooks = obMapperCoinbene(json, exchangeCurrencyPair.left, exchangeCurrencyPair.right);
       console.log(orderBooks);
       return orderBooks;
     })
@@ -21,28 +21,28 @@ var obApiCallerCoinbene = function (exchangeCurrencyPair) {
   }
   
   
-  function obMapperCoinbene(json) {
+  function obMapperCoinbene(json, currencyLeft, currencyRigh) {
     // json -> raw json
   
     // bid : buy
-    var bidOrders = parseOrderCoinbene(json, "bids");
+    var bidOrders = parseOrderCoinbene(json, "bids", currencyLeft, currencyRigh);
     //console.log(bidOrders);
   
     // ask : sell
-    var askOrders = parseOrderCoinbene(json, "asks");
+    var askOrders = parseOrderCoinbene(json, "asks", currencyLeft, currencyRigh);
     //console.log(askOrders);
   
     return new OrderBook(bidOrders, askOrders);
   }
   
-  function parseOrderCoinbene(json, bidOrAsk) {
+  function parseOrderCoinbene(json, bidOrAsk, currencyLeft, currencyRigh) {
     var orderBook = json["data"];
   
     var orderArray = [];
     for (let order of orderBook[bidOrAsk]) {
         var price = parseFloat(order[0]);
         var amount = parseFloat(order[1]);
-        orderArray.push(new Order(EXCHANGE_ID.CoinBene, price, amount));
+        orderArray.push(new Order(EXCHANGE_ID.CoinBene, price, amount, currencyLeft, currencyRigh));
     }
   
     return orderArray;

@@ -13,35 +13,35 @@ var obApiCallerCointiger = function (exchangeCurrencyPair) {
       }
     })
     .then(json => {
-      var orderBooks = obMapperCointiger(json);
+      var orderBooks = obMapperCointiger(json, exchangeCurrencyPair.left, exchangeCurrencyPair.right);
       console.log(orderBooks);
       return orderBooks;
     })
     .catch(error => console.log(error));
   }
   
-  function obMapperCointiger(json) {
+  function obMapperCointiger(json, currencyLeft, currencyRigh) {
     // json -> raw json
   
     // bid : buy
-    var bidOrders = parseOrderCointiger(json, "buys");
+    var bidOrders = parseOrderCointiger(json, "buys", currencyLeft, currencyRigh);
     //console.log(bidOrders);
   
     // ask : sell
-    var askOrders = parseOrderCointiger(json, "asks");
+    var askOrders = parseOrderCointiger(json, "asks", currencyLeft, currencyRigh);
     //console.log(askOrders);
   
     return new OrderBook(bidOrders, askOrders);
   }
   
-  function parseOrderCointiger(json, bidOrAsk) {
+  function parseOrderCointiger(json, bidOrAsk, currencyLeft, currencyRigh) {
     var orderBook = ((json["data"])["depth_data"])["tick"];
   
     var orderArray = [];
     for (let order of orderBook[bidOrAsk]) {
         var price = parseFloat(order[0]);
         var amount = parseFloat(order[1]);
-        orderArray.push(new Order(EXCHANGE_ID.CoinTiger, price, amount));
+        orderArray.push(new Order(EXCHANGE_ID.CoinTiger, price, amount, currencyLeft, currencyRigh));
     }
   
     return orderArray;

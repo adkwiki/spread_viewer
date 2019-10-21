@@ -1,4 +1,5 @@
 const LIMIT_RANGE = 20;
+const ORDERBOOK_LIMIT = 100;
 
 function renderOb(choppedOrderbookBuy, choppedOrderbookSell) {
     //var depthArray = [];
@@ -19,7 +20,7 @@ function renderOb(choppedOrderbookBuy, choppedOrderbookSell) {
         bidTotalAdk = bidTotalAdk + bid.amount; //bid.order_amount;
     
         let spritPrice = splitBtcPrice(bid.price);
-        var priceDiv = $('<div class="col-4 px-1 text-right"></div>')
+        var priceDiv = $('<div class="col-5 px-1 text-right"></div>')
         .append($('<span class="price-left"></span>').text(spritPrice.left))
         .append($('<span class="price-buy"></span>').text(spritPrice.right))
         ;
@@ -29,8 +30,9 @@ function renderOb(choppedOrderbookBuy, choppedOrderbookSell) {
         $("#ob_bid_list").append(
             $('<div class="row order"></div>')
             .append($(`<div class="col-1 px-1"><img class="ex-icon" src="./image/exchange/${exchangeName.toLowerCase()}.svg"></div>`))
-            .append($('<div class="col-3 px-1"></div>').text(exchangeName))
-            //.append($('<div class="col-3 px-1 text-right"></div>').text(bidTotalBtc.toFixed(1)))
+            //.append($('<div class="col-3 px-1"></div>').text(exchangeName))
+            //.append($(`<div class="col-1 px-1 text-right"><img class="ex-icon" src="./image/currency/${bid.currencyRight.toLowerCase()}.svg"></div>`))
+            .append($(`<div class="col-2 px-1 text-right"></div>`).text(bid.currencyRight))
             .append($('<div class="col-4 px-1 text-right"></div>').text(bid.amount.toFixed(2))) //text(bid.order_amount.toFixed(2)))
             .append(priceDiv)
         );
@@ -67,7 +69,7 @@ function renderOb(choppedOrderbookBuy, choppedOrderbookSell) {
         askTotalAdk = askTotalAdk + ask.amount; //ask.order_amount;
     
         let spritPrice = splitBtcPrice(ask.price);
-        var priceDiv = $('<div class="col-4 px-1 text-right"></div>')
+        var priceDiv = $('<div class="col-5 px-1 text-right"></div>')
         .append($('<span class="price-left"></span>').text(spritPrice.left))
         .append($('<span class="price-sell"></span>').text(spritPrice.right))
         ;
@@ -78,8 +80,9 @@ function renderOb(choppedOrderbookBuy, choppedOrderbookSell) {
             $('<div class="row order"></div>')
             .append(priceDiv)
             .append($('<div class="col-4 px-1 text-right"></div>').text(ask.amount.toFixed(2))) //.text(ask.order_amount.toFixed(2)))
-            //.append($('<div class="col-3 px-2 text-right"></div>').text(askTotalBtc.toFixed(1)))
-            .append($('<div class="col-3 px-1"></div>').text(exchangeName))
+            //.append($(`<div class="col-1 px-1 text-right"><img class="ex-icon" src="./image/currency/${ask.currencyRight.toLowerCase()}.svg"></div>`))
+            .append($(`<div class="col-2 px-1 text-right"></div>`).text(ask.currencyRight))
+            //.append($('<div class="col-3 px-1"></div>').text(exchangeName))
             .append($(`<div class="col-1 px-1"><img class="ex-icon" src="./image/exchange/${exchangeName.toLowerCase()}.svg"></div>`))
         );
     
@@ -110,8 +113,8 @@ function aggregateOb() {
         return orderbooks;
     });
 
-    // promisesを実行
-    Promise.all(promises).then( function ( orderbookArray ) {
+    // async call apis
+    Promise.all(promises).then( function (orderbookArray) {
         console.log( orderbookArray ) ;	// rejectedがある場合は実行されない
 
         // merge orderbooks
@@ -122,12 +125,12 @@ function aggregateOb() {
             Array.prototype.push.apply(mergedOrderbookSell, orderbook.sellOrders);
         }
 
-        // sort
+        // sort & chop
         mergedOrderbookBuy.sort(SORTER_BUY_ORDERS);
         mergedOrderbookSell.sort(SORTER_SELL_ORDERS);
 
-        choppedOrderbookBuy = mergedOrderbookBuy.slice(0, 50);
-        choppedOrderbookSell = mergedOrderbookSell.slice(0, 50);
+        choppedOrderbookBuy = mergedOrderbookBuy.slice(0, ORDERBOOK_LIMIT);
+        choppedOrderbookSell = mergedOrderbookSell.slice(0, ORDERBOOK_LIMIT);
 
         console.log(choppedOrderbookBuy);
         console.log(choppedOrderbookSell);
@@ -135,8 +138,8 @@ function aggregateOb() {
         renderOb(choppedOrderbookBuy, choppedOrderbookSell);
 
     })
-    .catch( function ( reason ) {
-        console.log( reason ) ;	// "失敗!!"
+    .catch( function (reason) {
+        console.log(reason);
     });
     
 }

@@ -17,7 +17,7 @@ var obApiCallerP2pb2b = async function (exchangeCurrencyPair) {
       }
     })
     .then(json => {
-      var orderBooks = obMapperP2pb2b(json);
+      var orderBooks = obMapperP2pb2b(json, exchangeCurrencyPair.left, exchangeCurrencyPair.right);
       console.log(orderBooks);
       return orderBooks;
     })
@@ -33,23 +33,23 @@ var obApiCallerP2pb2b = async function (exchangeCurrencyPair) {
   return new OrderBook(buyOrders, sellOrders);
 }
   
-function obMapperP2pb2b(json) {
+function obMapperP2pb2b(json, currencyLeft, currencyRigh) {
   // json -> raw json
 
-  var orders = parseOrderP2pb2b(json, "orders");
+  var orders = parseOrderP2pb2b(json, "orders", currencyLeft, currencyRigh);
   //console.log(bidOrders);
 
   return orders;
 }
   
-function parseOrderP2pb2b(json, targetItemName) {
+function parseOrderP2pb2b(json, targetItemName, currencyLeft, currencyRigh) {
   var orderBook = json["result"];
 
   var orderArray = [];
   for (let order of orderBook[targetItemName]) {
       var price = parseFloat(order.price);
       var amount = parseFloat(order.amount);
-      orderArray.push(new Order(EXCHANGE_ID.P2PB2B, price, amount));
+      orderArray.push(new Order(EXCHANGE_ID.P2PB2B, price, amount, currencyLeft, currencyRigh));
   }
 
   return orderArray;

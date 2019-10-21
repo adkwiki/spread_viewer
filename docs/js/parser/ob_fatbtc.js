@@ -13,7 +13,7 @@ var obApiCallerFatbtc = function (exchangeCurrencyPair) {
       }
     })
     .then(json => {
-      var orderBooks = obMapperFatbtc(json);
+      var orderBooks = obMapperFatbtc(json, exchangeCurrencyPair.left, exchangeCurrencyPair.right);
       console.log(orderBooks);
       return orderBooks;
     })
@@ -21,27 +21,27 @@ var obApiCallerFatbtc = function (exchangeCurrencyPair) {
   }
   
   
-  function obMapperFatbtc(json) {
+  function obMapperFatbtc(json, currencyLeft, currencyRigh) {
     // json -> raw json
   
     // bid : buy
-    var bidOrders = parseOrderFatbtc(json, "bids");
+    var bidOrders = parseOrderFatbtc(json, "bids", currencyLeft, currencyRigh);
     //console.log(bidOrders);
   
     // ask : sell
-    var askOrders = parseOrderFatbtc(json, "asks");
+    var askOrders = parseOrderFatbtc(json, "asks", currencyLeft, currencyRigh);
     //console.log(askOrders);
   
     return new OrderBook(bidOrders, askOrders);
   }
   
-  function parseOrderFatbtc(json, bidOrAsk) {
+  function parseOrderFatbtc(json, bidOrAsk, currencyLeft, currencyRigh) {
   
     var orderArray = [];
     for (let order of json[bidOrAsk]) {
         var price = parseFloat(order[0]);
         var amount = parseFloat(order[1]);
-        orderArray.push(new Order(EXCHANGE_ID.fatbtc, price, amount));
+        orderArray.push(new Order(EXCHANGE_ID.fatbtc, price, amount, currencyLeft, currencyRigh));
     }
   
     return orderArray;

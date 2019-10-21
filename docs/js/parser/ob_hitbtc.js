@@ -14,34 +14,34 @@ var obApiCallerHitbtc = function (exchangeCurrencyPair) {
       }
     })
     .then(json => {
-      var orderBooks = obMapperHitBtc(json);
+      var orderBooks = obMapperHitBtc(json, exchangeCurrencyPair.left, exchangeCurrencyPair.right);
       console.log(orderBooks);
       return orderBooks;
     })
     .catch(error => console.log(error));
   }
   
-  function obMapperHitBtc(json) {
+  function obMapperHitBtc(json, currencyLeft, currencyRigh) {
     // json -> raw json
   
     // bid : buy
-    var bidOrders = parseOrderHitBtc(json, "bid");
+    var bidOrders = parseOrderHitBtc(json, "bid", currencyLeft, currencyRigh);
     //console.log(bidOrders);
   
     // ask : sell
-    var askOrders = parseOrderHitBtc(json, "ask");
+    var askOrders = parseOrderHitBtc(json, "ask", currencyLeft, currencyRigh);
     //console.log(askOrders);
   
     return new OrderBook(bidOrders, askOrders);
   }
   
-  function parseOrderHitBtc(json, bidOrAsk) {
+  function parseOrderHitBtc(json, bidOrAsk, currencyLeft, currencyRigh) {
   
     var orderArray = [];
     for (let order of json[bidOrAsk]) {
         var price = parseFloat(order.price);
         var amount = parseFloat(order.size);
-        orderArray.push(new Order(EXCHANGE_ID.HitBTC, price, amount));
+        orderArray.push(new Order(EXCHANGE_ID.HitBTC, price, amount, currencyLeft, currencyRigh));
     }
   
     return orderArray;
