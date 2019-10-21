@@ -26,6 +26,13 @@ let CURRENCY_NAME = {
     EUR : "EUR",
 };
 
+function isFiatCurrency(currencyName) {
+    if (currencyName === CURRENCY_NAME.USD || currencyName === CURRENCY_NAME.EUR) {
+        return true;
+    }
+    return false;
+}
+
 let EXCHANGES = [
     new Exchange(EXCHANGE_ID.AidosMarket, "AidosMarket"),
     new Exchange(EXCHANGE_ID.Coineal, "Coineal"),
@@ -110,7 +117,10 @@ let EXCHANGE_CURRENCY_PAIRS = [
     
     new ExchangeCurrencyPair(EXCHANGE_ID.EXRATES, CURRENCY_NAME.ADK, CURRENCY_NAME.BTC,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://api.exrates.me/openapi/v1/public/orderbook/adk_btc")]),
-    
+
+    new ExchangeCurrencyPair(EXCHANGE_ID.EXRATES, CURRENCY_NAME.ADK, CURRENCY_NAME.ETH,
+        [new OrderBookUrl(OB_URL_TYPE.ALL, "https://api.exrates.me/openapi/v1/public/orderbook/adk_eth")],
+        "https://api.exrates.me/openapi/v1/public/ticker?currency_pair=eth_btc"),
     
     new ExchangeCurrencyPair(EXCHANGE_ID.HitBTC, CURRENCY_NAME.ADK, CURRENCY_NAME.BTC,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://api.hitbtc.com/api/2/public/orderbook/ADKBTC")]),
@@ -123,19 +133,21 @@ let EXCHANGE_CURRENCY_PAIRS = [
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://openapi.idax.pro/api/v2/depth?pair=ADK_ETH")],
         "https://openapi.idax.pro/api/v2/ticker?pair=ETH_BTC"),
     
-    
     new ExchangeCurrencyPair(EXCHANGE_ID.STEX, CURRENCY_NAME.ADK, CURRENCY_NAME.BTC,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://api3.stex.com/public/orderbook/743")]),
 
     new ExchangeCurrencyPair(EXCHANGE_ID.STEX, CURRENCY_NAME.ADK, CURRENCY_NAME.ETH,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://api3.stex.com/public/orderbook/952")],
         "https://api3.stex.com/public/ticker/2"),
-
-    /* not supported pair?     
+    
     new ExchangeCurrencyPair(EXCHANGE_ID.STEX, CURRENCY_NAME.ADK, CURRENCY_NAME.USD,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://api3.stex.com/public/orderbook/744")],
         "https://api3.stex.com/public/ticker/702"),
-    */
+
+    new ExchangeCurrencyPair(EXCHANGE_ID.STEX, CURRENCY_NAME.ADK, CURRENCY_NAME.EUR,
+        [new OrderBookUrl(OB_URL_TYPE.ALL, "https://api3.stex.com/public/orderbook/745")],
+        "https://api3.stex.com/public/ticker/703"),
+    
     new ExchangeCurrencyPair(EXCHANGE_ID.CoinTiger, CURRENCY_NAME.ADK, CURRENCY_NAME.BTC,
         [new OrderBookUrl(OB_URL_TYPE.ALL, "https://api.cointiger.com/exchange/trading/api/market/depth?api_key=100310001&symbol=adkbtc&type=step0")]),
     

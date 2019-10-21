@@ -6,6 +6,9 @@ var obApiCallerStex = async function (exchangeCurrencyPair) {
 
   var convertPrice = 1;
   if (exchangeCurrencyPair.right !== CURRENCY_NAME.BTC) {
+
+    var invertConvertPrice = isFiatCurrency(exchangeCurrencyPair.right);
+
     // need converter
     convertPrice = await fetch(exchangeCurrencyPair.priceConvertUrl, { mode:"cors" })
     .then(response => {
@@ -17,6 +20,9 @@ var obApiCallerStex = async function (exchangeCurrencyPair) {
     })
     .then(json => {
       var convertPrice = priceConverterMapperStex(json);
+      if (invertConvertPrice) {
+        convertPrice = 1 / convertPrice;
+      }
       console.log(convertPrice);
       return convertPrice;
     })
