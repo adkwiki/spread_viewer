@@ -38,4 +38,4 @@ const fetchWithTimeout = (uri, options = {}, time = 5000) => {
     })
 }
 
-const API_CALL_TIMEOUT_MS = 5000;
+const API_CALL_TIMEOUT_MS = 10000;
