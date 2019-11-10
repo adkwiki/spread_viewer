@@ -26,13 +26,14 @@ function renderOb(choppedOrderbookBuy, choppedOrderbookSell) {
         ;
     
         var exchangeName = getExchangeName(bid.exchangeId);
+        var currencyName = getCurrencyName(bid.right);
 
         $("#ob_bid_list").append(
             $('<div class="row order"></div>')
             .append($(`<div class="col-1 px-1"><img class="ex-icon" src="./image/exchange/${exchangeName.toLowerCase()}.svg"></div>`))
             //.append($('<div class="col-3 px-1"></div>').text(exchangeName))
             //.append($(`<div class="col-1 px-1 text-right"><img class="ex-icon" src="./image/currency/${bid.currencyRight.toLowerCase()}.svg"></div>`))
-            .append($(`<div class="col-2 px-1 text-right"></div>`).text(bid.currencyRight))
+            .append($(`<div class="col-2 px-1 text-right"></div>`).text(currencyName))
             .append($('<div class="col-4 px-1 text-right"></div>').text(bid.amount.toFixed(2))) //text(bid.order_amount.toFixed(2)))
             .append(priceDiv)
         );
@@ -75,13 +76,14 @@ function renderOb(choppedOrderbookBuy, choppedOrderbookSell) {
         ;
     
         var exchangeName = getExchangeName(ask.exchangeId);
+        var currencyName = getCurrencyName(ask.right);
 
         $("#ob_ask_list").append(
             $('<div class="row order"></div>')
             .append(priceDiv)
             .append($('<div class="col-4 px-1 text-right"></div>').text(ask.amount.toFixed(2))) //.text(ask.order_amount.toFixed(2)))
             //.append($(`<div class="col-1 px-1 text-right"><img class="ex-icon" src="./image/currency/${ask.currencyRight.toLowerCase()}.svg"></div>`))
-            .append($(`<div class="col-2 px-1 text-right"></div>`).text(ask.currencyRight))
+            .append($(`<div class="col-2 px-1 text-right"></div>`).text(currencyName))
             //.append($('<div class="col-3 px-1"></div>').text(exchangeName))
             .append($(`<div class="col-1 px-1"><img class="ex-icon" src="./image/exchange/${exchangeName.toLowerCase()}.svg"></div>`))
         );
@@ -102,27 +104,77 @@ function renderOb(choppedOrderbookBuy, choppedOrderbookSell) {
 
 function aggregateOb() {
 
-    const promises = Object.keys(EXCHANGE_CURRENCY_PAIRS).map((key) => {
-        const exchangeCurrencyPair = EXCHANGE_CURRENCY_PAIRS[key];
-        console.log(exchangeCurrencyPair);
-
-        // call api
-        var obApiCaller = obFactoryApiCaller(exchangeCurrencyPair.exchangeId);
-        var orderbooks = obApiCaller(exchangeCurrencyPair);
-        
-        return orderbooks;
+    // create parm
+    const pairs = Object.keys(EXCHANGE_CURRENCY_PAIRS).map((key) => {
+        const pair = EXCHANGE_CURRENCY_PAIRS[key];
+        //console.log(pair);
+        return `${pair.exchangeId}_${pair.left}_${pair.right}`;
     });
 
-    // async call apis
-    Promise.all(promises).then( function (orderbookArray) {
-        console.log( orderbookArray ) ;	// rejectedがある場合は実行されない
+    // api call
+    //console.log(pairs);
+
+    let reqParam = "";
+    for (const pair of pairs) {
+        if (reqParam === "") {
+            reqParam = "?";
+        } else {
+            reqParam = reqParam + "&";
+        }
+        reqParam = reqParam + `cp[]=${pair}`
+    }
+
+    //console.log(reqParam);
+
+    fetch(`https://adk-aggregator.herokuapp.com/proxy_exchange_api${reqParam}`)
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(myJson) {
+      //console.log(JSON.stringify(myJson));
+
+      aggregateParser(myJson);
+    });
+  
+    return;
+
+    function aggregateParser(currencyPairArray) {
+        //console.log( currencyPairArray ) ;
 
         // merge orderbooks
         var mergedOrderbookBuy = [];
         var mergedOrderbookSell = [];
-        for (let orderbook of orderbookArray) {
-            Array.prototype.push.apply(mergedOrderbookBuy, orderbook.buyOrders);
-            Array.prototype.push.apply(mergedOrderbookSell, orderbook.sellOrders);
+        for (let pair of currencyPairArray) {
+
+            let bridgeCoefficient = 1;
+            if (pair.currencyPair.right !== CURRENCY_ID.BTC) {
+                // calc adjusted price
+                bridgeCoefficient = pair.bridgeCoefficient;
+            }
+
+
+            let buyArray = [];
+            for (const order of pair.orderbook.buy) {
+                buyArray.push({
+                    exchangeId: pair.exchangeId,
+                    right: pair.currencyPair.right,
+                    price: order.price * bridgeCoefficient,
+                    amount: order.volume,
+                });                
+            }
+
+            let sellArray = [];
+            for (const order of pair.orderbook.sell) {
+                sellArray.push({
+                    exchangeId: pair.exchangeId,
+                    right: pair.currencyPair.right,
+                    price: order.price * bridgeCoefficient,
+                    amount: order.volume,
+                });                
+            }
+
+            Array.prototype.push.apply(mergedOrderbookBuy, buyArray);
+            Array.prototype.push.apply(mergedOrderbookSell, sellArray);
         }
 
         // sort & chop
@@ -132,14 +184,11 @@ function aggregateOb() {
         choppedOrderbookBuy = mergedOrderbookBuy.slice(0, ORDERBOOK_LIMIT);
         choppedOrderbookSell = mergedOrderbookSell.slice(0, ORDERBOOK_LIMIT);
 
-        console.log(choppedOrderbookBuy);
-        console.log(choppedOrderbookSell);
+        //console.log(choppedOrderbookBuy);
+        //console.log(choppedOrderbookSell);
 
         renderOb(choppedOrderbookBuy, choppedOrderbookSell);
 
-    })
-    .catch( function (reason) {
-        console.log(reason);
-    });
+    }
     
 }
