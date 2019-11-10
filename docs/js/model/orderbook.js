@@ -76,25 +76,6 @@ function getCurrencyName(currencyId) {
     }
 }
 
-/*
-class Order {
-    constructor(exchangeId, price, amount, currencyRight) {
-        this.exchangeId = exchangeId;
-        this.price = price;
-        this.amount = amount;
-        this.currencyRight = currencyRight;
-    }
-}
-
-class OrderBook {
-    constructor(exchangeCurrencyPair, status, buyOrders, sellOrders) {
-        this.exchangeCurrencyPair = exchangeCurrencyPair;
-        this.status = status;
-        this.buyOrders = buyOrders;
-        this.sellOrders = sellOrders;
-    }
-}
-*/
 function SORTER_SELL_ORDERS(a, b) {
     if (a.price > b.price) {
       return 1;
@@ -120,7 +101,6 @@ class ExchangeCurrencyPair {
 }
 
 let EXCHANGE_CURRENCY_PAIRS = [
-    
     new ExchangeCurrencyPair(EXCHANGE_ID.AidosMarket, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
 
     new ExchangeCurrencyPair(EXCHANGE_ID.Coineal, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
@@ -147,6 +127,5 @@ let EXCHANGE_CURRENCY_PAIRS = [
     new ExchangeCurrencyPair(EXCHANGE_ID.fatbtc, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
 
     new ExchangeCurrencyPair(EXCHANGE_ID.BITLOCUS, CURRENCY_ID.ADK, CURRENCY_ID.EUR),
-
 ];
 

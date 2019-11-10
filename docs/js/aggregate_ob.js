@@ -110,10 +110,9 @@ function aggregateOb() {
         //console.log(pair);
         return `${pair.exchangeId}_${pair.left}_${pair.right}`;
     });
-
-    // api call
     //console.log(pairs);
 
+    // api call
     let reqParam = "";
     for (const pair of pairs) {
         if (reqParam === "") {
@@ -130,10 +129,9 @@ function aggregateOb() {
     .then(function(response) {
       return response.json();
     })
-    .then(function(myJson) {
-      //console.log(JSON.stringify(myJson));
-
-      aggregateParser(myJson);
+    .then(function(jsonObj) {
+      //console.log(JSON.stringify(jsonObj));
+      aggregateParser(jsonObj);
     });
   
     return;
@@ -151,7 +149,6 @@ function aggregateOb() {
                 // calc adjusted price
                 bridgeCoefficient = pair.bridgeCoefficient;
             }
-
 
             let buyArray = [];
             for (const order of pair.orderbook.buy) {
@@ -188,7 +185,5 @@ function aggregateOb() {
         //console.log(choppedOrderbookSell);
 
         renderOb(choppedOrderbookBuy, choppedOrderbookSell);
-
     }
-    
 }
