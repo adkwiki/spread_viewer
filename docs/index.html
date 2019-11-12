@@ -95,6 +95,37 @@
     <!-- orderbook -->
     <div class="row">
       <div class="col-12 px-1">
+        <b>aggregate status</b>
+      </div>
+
+      <div class="col-12 p-1">
+        <!-- spacer -->
+      </div>
+    </div>
+
+    <div class="row">
+        <div id="pair_list" class="col-12">
+            <div class="row">
+              <div class="col-2 px-1">ex</div>
+              <div class="col-2 px-1">pair - bridge</div>
+              <div class="col-2 px-1">bridge price</div>
+              <div class="col-2 px-1 price-buy">buy</div>
+              <div class="col-2 px-1">spread</div>
+              <div class="col-2 px-1 price-sell">sell</div>
+            </div>      
+        </div>
+    </div>
+
+    <!-- TODO padding method -->
+    <div class="row">
+      <div class="col-12 px-0">
+        <hr style="margin-top:2px; margin-bottom:5px;">
+      </div>
+    </div>
+
+    <!-- orderbook -->
+    <div class="row">
+      <div class="col-12 px-1">
         <b>orderbook</b>
       </div>
 
@@ -157,37 +188,10 @@
   <script src="https://www.amcharts.com/lib/4/charts.js"></script>
   <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
   -->
-  <!-- test mock api data-->
-  <!--
-  <script src="./mock_api/ob_aidosmarket.js"></script>
-  <script src="./mock_api/ob_stex.js"></script>
-  <script src="./mock_api/ob_idax.js"></script>
-  <script src="./mock_api/ob_hitbtc.js"></script>
-  <script src="./mock_api/ob_exrates.js"></script>
-  <script src="./mock_api/ob_cointiger.js"></script>
-  <script src="./mock_api/ob_coineal.js"></script>
-  <script src="./mock_api/ob_coinbene.js"></script>
-  <script src="./mock_api/ob_p2pb2b_buy.js"></script>
-  <script src="./mock_api/ob_p2pb2b_sell.js"></script>
-  <script src="./mock_api/ob_fatbtc.js"></script>
-  -->
-
   <script>
   var scripts = [
     "model/orderbook.js",
-    "utils.js",
-    
-    "parser/ob_aidosmarket.js",
-    "parser/ob_stex.js",
-    "parser/ob_idax.js",
-    "parser/ob_hitbtc.js",
-    "parser/ob_exrates.js",
-    "parser/ob_cointiger.js",
-    "parser/ob_coineal.js",
-    "parser/ob_coinbene.js",
-    "parser/ob_p2pb2b.js",
-
-    "parser/ob_factory_api_caller.js",
+    "utils.js",    
     "aggregate_ob.js",
   ];
   var versioningNum = new Date().getTime();
