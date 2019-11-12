@@ -22,14 +22,14 @@ function renderStats(pairStatsList) {
             status = "o";
         }
 
-        console.log(pairStats.buy);
+        //console.log(pairStats.buy);
         let buySpritPrice = splitBtcPrice(pairStats.buy);
         let buyPriceDiv = $('<div class="col-2 px-1 text-right"></div>')
         .append($('<span class="price-left"></span>').text(buySpritPrice.left))
         .append($('<span class="price-buy"></span>').text(buySpritPrice.right))
         ;
 
-        console.log(pairStats.sell);
+        //console.log(pairStats.sell);
         let sellSpritPrice = splitBtcPrice(pairStats.sell);
         let sellPriceDiv = $('<div class="col-2 px-1 text-right"></div>')
         .append($('<span class="price-left"></span>').text(sellSpritPrice.left))
