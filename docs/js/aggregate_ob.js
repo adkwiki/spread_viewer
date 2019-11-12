@@ -1,6 +1,62 @@
 const LIMIT_RANGE = 20;
 const ORDERBOOK_LIMIT = 100;
 
+function renderStats(pairStatsList) {
+    // Exchange icon. name :: pair :: status :: best buy/sell (amount?) :: bridge pair(price)
+    for (const pairStats of pairStatsList) {
+
+        var exchangeName = getExchangeName(pairStats.exchangeId);
+        var pairName = `${getCurrencyName(pairStats.right)}`;
+        var bridgeName = "DIRECT";
+        var bridgePrice = "";
+        //console.log(`${exchangeName}::${pairName}::${pairStats.bridge}`);
+        if (typeof pairStats.bridge !== 'undefined') {
+            bridgeName = `${getCurrencyName(pairStats.bridge.left)}/${getCurrencyName(pairStats.bridge.right)}`;
+            bridgePrice = `${pairStats.bridgePrice.toFixed(4)}`;
+        }
+
+        var statuscolor = "#D9544F";
+        var status = "x";
+        if (pairStats.success === true) {
+            statuscolor = "#0FB387";
+            status = "o";
+        }
+
+        console.log(pairStats.buy);
+        let buySpritPrice = splitBtcPrice(pairStats.buy);
+        let buyPriceDiv = $('<div class="col-2 px-1 text-right"></div>')
+        .append($('<span class="price-left"></span>').text(buySpritPrice.left))
+        .append($('<span class="price-buy"></span>').text(buySpritPrice.right))
+        ;
+
+        console.log(pairStats.sell);
+        let sellSpritPrice = splitBtcPrice(pairStats.sell);
+        let sellPriceDiv = $('<div class="col-2 px-1 text-right"></div>')
+        .append($('<span class="price-left"></span>').text(sellSpritPrice.left))
+        .append($('<span class="price-sell"></span>').text(sellSpritPrice.right))
+        ;
+
+        let spreadSpritPrice = splitBtcPrice(pairStats.sell - pairStats.buy);
+        let spreadPriceDiv = $('<div class="col-2 px-1 text-right"></div>')
+        .append($('<span class="price-left"></span>').text(spreadSpritPrice.left))
+        .append($('<span></span>').text(spreadSpritPrice.right))
+        ;
+
+
+        $("#pair_list").append(
+            $('<div class="row order"></div>')
+            .append($(` <div class="col-2 px-1">
+                            <font color="${statuscolor}">${status}</font> <img class="ex-icon" src="./image/exchange/${exchangeName.toLowerCase()}.svg"> ${exchangeName}
+                        </div>`))
+            .append($(`<div class="col-2 px-1 text-left"></div>`).text(`${pairName} - ${bridgeName}`))
+            .append($('<div class="col-2 px-1 text-right"></div>').text(bridgePrice))
+            .append(buyPriceDiv)
+            .append(spreadPriceDiv)
+            .append(sellPriceDiv)
+        );
+    }
+}
+
 function renderOb(choppedOrderbookBuy, choppedOrderbookSell) {
     //var depthArray = [];
     
@@ -125,7 +181,8 @@ function aggregateOb() {
 
     //console.log(reqParam);
 
-    fetch(`https://adk-aggregator.herokuapp.com/proxy_exchange_api${reqParam}`)
+    var dummyParam = new Date().getTime();
+    fetch(`https://adk-aggregator.herokuapp.com/proxy_exchange_api${reqParam}&dummy=${dummyParam}`)
     .then(function(response) {
       return response.json();
     })
@@ -139,6 +196,8 @@ function aggregateOb() {
     function aggregateParser(currencyPairArray) {
         //console.log( currencyPairArray ) ;
 
+        var pairStatsList = [];
+
         // merge orderbooks
         var mergedOrderbookBuy = [];
         var mergedOrderbookSell = [];
@@ -151,17 +210,27 @@ function aggregateOb() {
             }
 
             let buyArray = [];
+            let buyHeadPrice = null;
             for (const order of pair.orderbook.buy) {
+                const price = order.price * bridgeCoefficient;
+                if(!buyHeadPrice) {
+                    buyHeadPrice = price;
+                }
                 buyArray.push({
                     exchangeId: pair.exchangeId,
                     right: pair.currencyPair.right,
-                    price: order.price * bridgeCoefficient,
+                    price: price,
                     amount: order.volume,
                 });                
             }
 
             let sellArray = [];
+            let sellHeadPrice = null;
             for (const order of pair.orderbook.sell) {
+                const price = order.price * bridgeCoefficient;
+                if(!sellHeadPrice) {
+                    sellHeadPrice = price;
+                }
                 sellArray.push({
                     exchangeId: pair.exchangeId,
                     right: pair.currencyPair.right,
@@ -172,6 +241,17 @@ function aggregateOb() {
 
             Array.prototype.push.apply(mergedOrderbookBuy, buyArray);
             Array.prototype.push.apply(mergedOrderbookSell, sellArray);
+
+            pairStatsList.push({
+                exchangeId: pair.exchangeId,
+                left: pair.currencyPair.left,
+                right: pair.currencyPair.right,
+                buy: buyHeadPrice,
+                sell: sellHeadPrice,
+                success: pair.orderbook.success,
+                bridge: pair.currencyPair.bridge,
+                bridgePrice: pair.bridgePrice,
+            });
         }
 
         // sort & chop
@@ -184,6 +264,7 @@ function aggregateOb() {
         //console.log(choppedOrderbookBuy);
         //console.log(choppedOrderbookSell);
 
+        renderStats(pairStatsList);
         renderOb(choppedOrderbookBuy, choppedOrderbookSell);
     }
 }

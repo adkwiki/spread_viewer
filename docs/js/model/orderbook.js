@@ -107,8 +107,9 @@ let EXCHANGE_CURRENCY_PAIRS = [
 
     new ExchangeCurrencyPair(EXCHANGE_ID.CoinTiger, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
 
-    new ExchangeCurrencyPair(EXCHANGE_ID.EXRATES, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
-    new ExchangeCurrencyPair(EXCHANGE_ID.EXRATES, CURRENCY_ID.ADK, CURRENCY_ID.ETH),
+    // TODO EXRATES has hard api call limit : need proxy api cache feature
+    //new ExchangeCurrencyPair(EXCHANGE_ID.EXRATES, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
+    //new ExchangeCurrencyPair(EXCHANGE_ID.EXRATES, CURRENCY_ID.ADK, CURRENCY_ID.ETH),
     
     new ExchangeCurrencyPair(EXCHANGE_ID.HitBTC, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
         
