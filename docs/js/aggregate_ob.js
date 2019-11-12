@@ -17,31 +17,33 @@ function renderStats(pairStatsList) {
 
         var statuscolor = "#D9544F";
         var status = "x";
+        let buyPriceDiv = $('<div class="col-2 px-1 text-right"></div>');
+        let sellPriceDiv = $('<div class="col-2 px-1 text-right"></div>');
+        let spreadPriceDiv = $('<div class="col-2 px-1 text-right"></div>');
         if (pairStats.success === true) {
             statuscolor = "#0FB387";
             status = "o";
+        
+            //console.log(pairStats.buy);
+            let buySpritPrice = splitBtcPrice(pairStats.buy);
+            buyPriceDiv = buyPriceDiv
+            .append($('<span class="price-left"></span>').text(buySpritPrice.left))
+            .append($('<span class="price-buy"></span>').text(buySpritPrice.right))
+            ;
+
+            //console.log(pairStats.sell);
+            let sellSpritPrice = splitBtcPrice(pairStats.sell);
+            sellPriceDiv = sellPriceDiv
+            .append($('<span class="price-left"></span>').text(sellSpritPrice.left))
+            .append($('<span class="price-sell"></span>').text(sellSpritPrice.right))
+            ;
+
+            let spreadSpritPrice = splitBtcPrice(pairStats.sell - pairStats.buy);
+            spreadPriceDiv = spreadPriceDiv
+            .append($('<span class="price-left"></span>').text(spreadSpritPrice.left))
+            .append($('<span></span>').text(spreadSpritPrice.right))
+            ;
         }
-
-        //console.log(pairStats.buy);
-        let buySpritPrice = splitBtcPrice(pairStats.buy);
-        let buyPriceDiv = $('<div class="col-2 px-1 text-right"></div>')
-        .append($('<span class="price-left"></span>').text(buySpritPrice.left))
-        .append($('<span class="price-buy"></span>').text(buySpritPrice.right))
-        ;
-
-        //console.log(pairStats.sell);
-        let sellSpritPrice = splitBtcPrice(pairStats.sell);
-        let sellPriceDiv = $('<div class="col-2 px-1 text-right"></div>')
-        .append($('<span class="price-left"></span>').text(sellSpritPrice.left))
-        .append($('<span class="price-sell"></span>').text(sellSpritPrice.right))
-        ;
-
-        let spreadSpritPrice = splitBtcPrice(pairStats.sell - pairStats.buy);
-        let spreadPriceDiv = $('<div class="col-2 px-1 text-right"></div>')
-        .append($('<span class="price-left"></span>').text(spreadSpritPrice.left))
-        .append($('<span></span>').text(spreadSpritPrice.right))
-        ;
-
 
         $("#pair_list").append(
             $('<div class="row order"></div>')
