@@ -25,24 +25,30 @@ function renderStats(pairStatsList) {
             status = "o";
         
             //console.log(pairStats.buy);
-            let buySpritPrice = splitBtcPrice(pairStats.buy);
-            buyPriceDiv = buyPriceDiv
-            .append($('<span class="price-left"></span>').text(buySpritPrice.left))
-            .append($('<span class="price-buy"></span>').text(buySpritPrice.right))
-            ;
+            if (pairStats.buy !== null) {
+                let buySpritPrice = splitBtcPrice(pairStats.buy);
+                buyPriceDiv = buyPriceDiv
+                .append($('<span class="price-left"></span>').text(buySpritPrice.left))
+                .append($('<span class="price-buy"></span>').text(buySpritPrice.right))
+                ;
+            }
 
             //console.log(pairStats.sell);
-            let sellSpritPrice = splitBtcPrice(pairStats.sell);
-            sellPriceDiv = sellPriceDiv
-            .append($('<span class="price-left"></span>').text(sellSpritPrice.left))
-            .append($('<span class="price-sell"></span>').text(sellSpritPrice.right))
-            ;
+            if (pairStats.sell !== null) {
+                let sellSpritPrice = splitBtcPrice(pairStats.sell);
+                sellPriceDiv = sellPriceDiv
+                .append($('<span class="price-left"></span>').text(sellSpritPrice.left))
+                .append($('<span class="price-sell"></span>').text(sellSpritPrice.right))
+                ;
+            }
 
-            let spreadSpritPrice = splitBtcPrice(pairStats.sell - pairStats.buy);
-            spreadPriceDiv = spreadPriceDiv
-            .append($('<span class="price-left"></span>').text(spreadSpritPrice.left))
-            .append($('<span></span>').text(spreadSpritPrice.right))
-            ;
+            if (pairStats.buy !== null && pairStats.sell !== null) { 
+                let spreadSpritPrice = splitBtcPrice(pairStats.sell - pairStats.buy);
+                spreadPriceDiv = spreadPriceDiv
+                .append($('<span class="price-left"></span>').text(spreadSpritPrice.left))
+                .append($('<span></span>').text(spreadSpritPrice.right))
+                ;
+            }
         }
 
         $("#pair_list").append(
