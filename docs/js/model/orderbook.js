@@ -116,7 +116,8 @@ let EXCHANGE_CURRENCY_PAIRS = [
     // new ExchangeCurrencyPair(EXCHANGE_ID.IDAX, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
     // new ExchangeCurrencyPair(EXCHANGE_ID.IDAX, CURRENCY_ID.ADK, CURRENCY_ID.ETH),
 
-    new ExchangeCurrencyPair(EXCHANGE_ID.P2PB2B, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
+    // Delisting
+    // new ExchangeCurrencyPair(EXCHANGE_ID.P2PB2B, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
 
     new ExchangeCurrencyPair(EXCHANGE_ID.STEX, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
     new ExchangeCurrencyPair(EXCHANGE_ID.STEX, CURRENCY_ID.ADK, CURRENCY_ID.ETH),
