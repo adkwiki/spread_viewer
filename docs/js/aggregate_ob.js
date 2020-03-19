@@ -12,7 +12,9 @@ function renderStats(pairStatsList) {
         //console.log(`${exchangeName}::${pairName}::${pairStats.bridge}`);
         if (typeof pairStats.bridge !== 'undefined') {
             bridgeName = `${getCurrencyName(pairStats.bridge.left)}/${getCurrencyName(pairStats.bridge.right)}`;
-            bridgePrice = `${pairStats.bridgePrice.toFixed(4)}`;
+            if (pairStats.bridgePrice !== null) {
+                bridgePrice = `${pairStats.bridgePrice.toFixed(4)}`;
+            }
         }
 
         var statuscolor = "#D9544F";
