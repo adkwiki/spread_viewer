@@ -17,7 +17,8 @@ let EXCHANGE_ID = {
     CoinBene : 9,
     fatbtc : 10,
     DEXTRADE : 11,
-    BITLOCUS : 12
+    BITLOCUS : 12,
+    WhiteBIT: 14
 };
 
 let EXCHANGES = [
@@ -32,7 +33,8 @@ let EXCHANGES = [
     new Exchange(EXCHANGE_ID.CoinBene, "CoinBene"),
     new Exchange(EXCHANGE_ID.fatbtc, "fatbtc"),   
     new Exchange(EXCHANGE_ID.DEXTRADE, "DEXTRADE"),     
-    new Exchange(EXCHANGE_ID.BITLOCUS, "BITLOCUS"),     
+    new Exchange(EXCHANGE_ID.BITLOCUS, "BITLOCUS"),
+    new Exchange(EXCHANGE_ID.WhiteBIT, "WhiteBIT"),                
 ];
 
 function getExchangeName(exchangeId) {
@@ -131,5 +133,9 @@ let EXCHANGE_CURRENCY_PAIRS = [
     new ExchangeCurrencyPair(EXCHANGE_ID.DEXTRADE, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
     new ExchangeCurrencyPair(EXCHANGE_ID.DEXTRADE, CURRENCY_ID.ADK, CURRENCY_ID.USDT),
     new ExchangeCurrencyPair(EXCHANGE_ID.DEXTRADE, CURRENCY_ID.ADK, CURRENCY_ID.ETH),
+
+    new ExchangeCurrencyPair(EXCHANGE_ID.WhiteBIT, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
+    new ExchangeCurrencyPair(EXCHANGE_ID.WhiteBIT, CURRENCY_ID.ADK, CURRENCY_ID.USD),
+    new ExchangeCurrencyPair(EXCHANGE_ID.WhiteBIT, CURRENCY_ID.ADK, CURRENCY_ID.EUR),
 ];
 
