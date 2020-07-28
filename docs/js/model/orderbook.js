@@ -7,7 +7,7 @@ class Exchange {
 
 let EXCHANGE_ID = {
     AidosMarket : 1,
-    Coineal : 2,
+    // Coineal : 2,
     CoinTiger : 3,
     EXRATES : 4,
     HitBTC : 5,
@@ -24,7 +24,7 @@ let EXCHANGE_ID = {
 
 let EXCHANGES = [
     new Exchange(EXCHANGE_ID.AidosMarket, "AidosMarket"),
-    new Exchange(EXCHANGE_ID.Coineal, "Coineal"),
+    // new Exchange(EXCHANGE_ID.Coineal, "Coineal"),
     new Exchange(EXCHANGE_ID.CoinTiger, "CoinTiger"),
     new Exchange(EXCHANGE_ID.EXRATES, "EXRATES"),
     new Exchange(EXCHANGE_ID.HitBTC, "HitBTC"),
@@ -107,7 +107,7 @@ class ExchangeCurrencyPair {
 let EXCHANGE_CURRENCY_PAIRS = [
     new ExchangeCurrencyPair(EXCHANGE_ID.AidosMarket, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
 
-    new ExchangeCurrencyPair(EXCHANGE_ID.Coineal, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
+    // new ExchangeCurrencyPair(EXCHANGE_ID.Coineal, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
 
     new ExchangeCurrencyPair(EXCHANGE_ID.CoinTiger, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
 
