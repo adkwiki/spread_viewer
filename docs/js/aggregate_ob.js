@@ -192,8 +192,8 @@ function aggregateOb() {
     //console.log(reqParam);
 
     var dummyParam = new Date().getTime();
-    //fetch(`https://adk-aggregator.herokuapp.com/proxy_exchange_api${reqParam}&dummy=${dummyParam}`)
-    fetch(`http://localhost:3000/proxy_exchange_api${reqParam}&dummy=${dummyParam}`)
+    fetch(`https://adk-aggregator.herokuapp.com/proxy_exchange_api${reqParam}&dummy=${dummyParam}`)
+        //fetch(`http://localhost:3000/proxy_exchange_api${reqParam}&dummy=${dummyParam}`)
         .then(function (response) {
             return response.json();
         })
