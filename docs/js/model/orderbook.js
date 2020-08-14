@@ -2,24 +2,25 @@ class Exchange {
     constructor(exchangeId, name) {
         this.exchangeId = exchangeId;
         this.name = name;
-    } 
+    }
 }
 
 let EXCHANGE_ID = {
-    AidosMarket : 1,
+    AidosMarket: 1,
     // Coineal : 2,
-    CoinTiger : 3,
-    EXRATES : 4,
-    HitBTC : 5,
-    IDAX : 6,
-    P2PB2B : 7,
-    STEX : 8,
-    CoinBene : 9,
-    fatbtc : 10,
-    DEXTRADE : 11,
-    BITLOCUS : 12,
+    CoinTiger: 3,
+    EXRATES: 4,
+    HitBTC: 5,
+    IDAX: 6,
+    P2PB2B: 7,
+    STEX: 8,
+    CoinBene: 9,
+    fatbtc: 10,
+    DEXTRADE: 11,
+    BITLOCUS: 12,
     WhiteBIT: 14,
-    INDOEX: 15
+    INDOEX: 15,
+    Bithumb: 16,
 };
 
 let EXCHANGES = [
@@ -32,11 +33,12 @@ let EXCHANGES = [
     new Exchange(EXCHANGE_ID.P2PB2B, "P2PB2B"),
     new Exchange(EXCHANGE_ID.STEX, "STEX"),
     new Exchange(EXCHANGE_ID.CoinBene, "CoinBene"),
-    new Exchange(EXCHANGE_ID.fatbtc, "fatbtc"),   
-    new Exchange(EXCHANGE_ID.DEXTRADE, "DEXTRADE"),     
+    new Exchange(EXCHANGE_ID.fatbtc, "fatbtc"),
+    new Exchange(EXCHANGE_ID.DEXTRADE, "DEXTRADE"),
     new Exchange(EXCHANGE_ID.BITLOCUS, "BITLOCUS"),
-    new Exchange(EXCHANGE_ID.WhiteBIT, "WhiteBIT"),  
-    new Exchange(EXCHANGE_ID.INDOEX, "INDOEX"),                              
+    new Exchange(EXCHANGE_ID.WhiteBIT, "WhiteBIT"),
+    new Exchange(EXCHANGE_ID.INDOEX, "INDOEX"),
+    new Exchange(EXCHANGE_ID.Bithumb, "Bithumb"),
 ];
 
 function getExchangeName(exchangeId) {
@@ -51,16 +53,16 @@ class Currency {
     constructor(currencyId, name) {
         this.currencyId = currencyId;
         this.name = name;
-    } 
+    }
 }
 
 let CURRENCY_ID = {
-    ADK : 1,
-    BTC : 2,
-    ETH : 3,
-    USD : 4,
-    EUR : 5,
-    USDT : 6
+    ADK: 1,
+    BTC: 2,
+    ETH: 3,
+    USD: 4,
+    EUR: 5,
+    USDT: 6
 };
 
 let CURRENCIES = [
@@ -82,9 +84,9 @@ function getCurrencyName(currencyId) {
 
 function SORTER_SELL_ORDERS(a, b) {
     if (a.price > b.price) {
-      return 1;
+        return 1;
     } else if (b.price > a.price) {
-      return -1;
+        return -1;
     }
 }
 
@@ -113,9 +115,9 @@ let EXCHANGE_CURRENCY_PAIRS = [
 
     new ExchangeCurrencyPair(EXCHANGE_ID.EXRATES, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
     new ExchangeCurrencyPair(EXCHANGE_ID.EXRATES, CURRENCY_ID.ADK, CURRENCY_ID.ETH),
-    
+
     new ExchangeCurrencyPair(EXCHANGE_ID.HitBTC, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
-        
+
     // new ExchangeCurrencyPair(EXCHANGE_ID.IDAX, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
     // new ExchangeCurrencyPair(EXCHANGE_ID.IDAX, CURRENCY_ID.ADK, CURRENCY_ID.ETH),
 
@@ -127,7 +129,7 @@ let EXCHANGE_CURRENCY_PAIRS = [
     // new ExchangeCurrencyPair(EXCHANGE_ID.STEX, CURRENCY_ID.ADK, CURRENCY_ID.EUR),
 
     new ExchangeCurrencyPair(EXCHANGE_ID.CoinBene, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
-    
+
     new ExchangeCurrencyPair(EXCHANGE_ID.fatbtc, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
 
     new ExchangeCurrencyPair(EXCHANGE_ID.BITLOCUS, CURRENCY_ID.ADK, CURRENCY_ID.EUR),
@@ -141,5 +143,8 @@ let EXCHANGE_CURRENCY_PAIRS = [
     new ExchangeCurrencyPair(EXCHANGE_ID.WhiteBIT, CURRENCY_ID.ADK, CURRENCY_ID.EUR),
 
     new ExchangeCurrencyPair(EXCHANGE_ID.INDOEX, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
+
+    new ExchangeCurrencyPair(EXCHANGE_ID.Bithumb, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
+    new ExchangeCurrencyPair(EXCHANGE_ID.Bithumb, CURRENCY_ID.ADK, CURRENCY_ID.USDT),
 ];
 
