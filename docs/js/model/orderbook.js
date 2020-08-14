@@ -130,7 +130,8 @@ let EXCHANGE_CURRENCY_PAIRS = [
 
     new ExchangeCurrencyPair(EXCHANGE_ID.CoinBene, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
 
-    new ExchangeCurrencyPair(EXCHANGE_ID.fatbtc, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
+    // TODO update cloudflare npm
+    //new ExchangeCurrencyPair(EXCHANGE_ID.fatbtc, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
 
     new ExchangeCurrencyPair(EXCHANGE_ID.BITLOCUS, CURRENCY_ID.ADK, CURRENCY_ID.EUR),
 
