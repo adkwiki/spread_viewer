@@ -21,6 +21,7 @@ let EXCHANGE_ID = {
     WhiteBIT: 14,
     INDOEX: 15,
     Bithumb: 16,
+    Bittrex: 17,
 };
 
 let EXCHANGES = [
@@ -39,6 +40,8 @@ let EXCHANGES = [
     new Exchange(EXCHANGE_ID.WhiteBIT, "WhiteBIT"),
     new Exchange(EXCHANGE_ID.INDOEX, "INDOEX"),
     new Exchange(EXCHANGE_ID.Bithumb, "Bithumb"),
+    new Exchange(EXCHANGE_ID.Bittrex, "Bittrex"),
+
 ];
 
 function getExchangeName(exchangeId) {
@@ -147,5 +150,8 @@ let EXCHANGE_CURRENCY_PAIRS = [
 
     new ExchangeCurrencyPair(EXCHANGE_ID.Bithumb, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
     new ExchangeCurrencyPair(EXCHANGE_ID.Bithumb, CURRENCY_ID.ADK, CURRENCY_ID.USDT),
+
+    new ExchangeCurrencyPair(EXCHANGE_ID.Bittrex, CURRENCY_ID.ADK, CURRENCY_ID.BTC),
+
 ];
 
